@@ -25,7 +25,7 @@ export default function Navbar() {
     };
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar style={{ height: '7%' }}>
+            <AppBar style={{ height: '7%',backgroundColor:'#245a71' }}>
                 <Toolbar variant="dense" className='toolbar'>
                     <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
                         <MenuIcon onClick={()=>toggleDrawer(!isDrawerOpen)} />
