@@ -5,7 +5,7 @@ const LogicGroup = () => {
   return {
     "kind": "category",
     "name": "Logic",
-    "colour":"#a82a20",
+    "colour":"#cbacff",
     "contents": [
         {
             "kind": "block",
@@ -27,6 +27,10 @@ const LogicGroup = () => {
             "kind": "block",
             "type": "logic_null"
         },
+        {
+            "kind": "block",
+            "type": "controls_if" 
+          },
    
     ]
   };

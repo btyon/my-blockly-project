@@ -14,7 +14,6 @@ const FunctionGroup = () => {
         {
             "kind": "block",
             "type": "procedures_defreturn"
-
         },
         {
             "kind": "block",

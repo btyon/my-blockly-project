@@ -1,13 +1,12 @@
 import React from 'react';
 import * as Blockly from 'blockly';
 import './veriableGroup.css'
-const VariablesGroup = () => {
-  Blockly.Blocks['variables_set'].SetColour = "#ff8c1b"; // Yeni renk kodu
 
+const VariablesGroup = () => {
   return {
     "kind": "category",
     "name": "Variables",
-    "colour": "#ff8c1b",
+    "colour": "#e67200",
     "contents": [
       {
         "kind": "block",

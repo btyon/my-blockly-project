@@ -3,7 +3,6 @@ import * as Blockly from 'blockly';
 import 'blockly/blocks';
 import 'blockly/javascript';
 import './blocklyPage.css'
-import ControlGroup from '../BlockGroups/Control/ControlGroup';
 import LogicGroup from '../BlockGroups/Logic/LogicGroup';
 import MathGroup from '../BlockGroups/Math/MathGroup';
 import LoopGroup from '../BlockGroups/Loop/LoopGroup';
@@ -13,27 +12,42 @@ import VariablesGroup from '../BlockGroups/Variables/VariablesGroup';
 import ListGroup from '../BlockGroups/List/ListGroup';
 
 
+
 const BlocklyPage: React.FC = () => {
   const blocklyDiv = useRef<HTMLDivElement>(null);
   const workspace = useRef<Blockly.WorkspaceSvg>();
 
-  // const saveWorkspace = () => {
-  //   const xml = Blockly.Xml.workspaceToDom(workspace.current);
-  //   const xmlText = Blockly.Xml.domToText(xml);
-  //   localStorage.setItem('blocklyWorkspace', xmlText);
-  //   alert('Workspace saved!');
-  // };
+  const getWorkspaceAsJson = () => {
+    const blocks = workspace.current.getAllBlocks(false);
+    const blocksData = blocks.map(block => {
+      return {
+        type: block.type,
+        id: block.id,
+        x: block.getRelativeToSurfaceXY().x,
+        y: block.getRelativeToSurfaceXY().y
+      };
+    });
 
-  // const loadWorkspace = () => {
-  //   const xmlText = localStorage.getItem('blocklyWorkspace');
-  //   if (xmlText) {
-  //     const xml = Blockly.Xml.textToDom(xmlText);
-  //     Blockly.Xml.domToWorkspace(xml, workspace.current);
-  //     alert('Workspace loaded!');
-  //   } else {
-  //     alert('No saved workspace found.');
-  //   }
-  // };
+    return JSON.stringify(blocksData, null, 2);
+  };
+  const triggerDownload = (content, fileName) => {
+    const blob = new Blob([content], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    downloadLink.download = fileName;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    URL.revokeObjectURL(url);
+  };
+
+
+  const saveWorkspaceAsJson = () => {
+    const jsonString = getWorkspaceAsJson();
+    triggerDownload(jsonString, 'blockly_workspace.json');
+  };
+
 
   useEffect(() => {
     if (blocklyDiv.current) {
@@ -41,9 +55,9 @@ const BlocklyPage: React.FC = () => {
         'base': Blockly.Themes.Classic,
         'blockStyles': {
           'variable_blocks': {
-            colourPrimary: "#ff8c1b",
-            colourSecondary: "#ff8c1b",
-            colourTertiary: "#ff8c1b"
+            colourPrimary: "#e67200",
+            colourSecondary: "#e67200",
+            colourTertiary: "#e67200"
           },
           'text_blocks': {
             colourPrimary: "#52007f",
@@ -56,39 +70,35 @@ const BlocklyPage: React.FC = () => {
             colourTertiary: "#00677d"
           },
           'logic_blocks': {
-            colourPrimary: "#a82a20",
-            colourSecondary: "#a82a20",
-            colourTertiary: "#a82a20"
+            colourPrimary: "#cbacff",
+            colourSecondary: "#cbacff",
+            colourTertiary: "#cbacff"
           },
           'math_blocks': {
-            colourPrimary: "#0079c1",
-            colourSecondary: "#0079c1",
-            colourTertiary: "#0079c1"
+            colourPrimary: "#00b5d0",
+            colourSecondary: "#00b5d0",
+            colourTertiary: "#00b5d0"
           },
           'loop_blocks': {
-            colourPrimary: "#2e9340",
-            colourSecondary: "#2e9340",
-            colourTertiary: "#2e9340"
+            colourPrimary: "#c5c341",
+            colourSecondary: "#c5c341",
+            colourTertiary: "#c5c341"
           },
-          
-          
-        
         },
-        name:'a'
+        name: 'a'
       });
 
       workspace.current = Blockly.inject(blocklyDiv.current, {
         toolbox: {
           "kind": "categoryToolbox",
           "contents": [
-            ControlGroup(),
             LogicGroup(),
             MathGroup(),
             LoopGroup(),
             FunctionGroup(),
             TextGroup(),
             VariablesGroup(),
-            ListGroup()
+            ListGroup(),
           ]
         },
         grid: {
@@ -109,9 +119,12 @@ const BlocklyPage: React.FC = () => {
     };
   }, []);
 
+
+  
   return (
     <div className="App">
-      <div ref={blocklyDiv} id="blocklyDivs" style={{ height:'93vh'}}>
+      <div ref={blocklyDiv} id="blocklyDivs" style={{ height: '93vh' }}>
+        <button onClick={saveWorkspaceAsJson}>asdsd</button>
       </div>
     </div>
   );

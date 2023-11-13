@@ -5,7 +5,7 @@ const MathGroup = () => {
   return {
     "kind": "category",
     "name": "Math",
-    "colour":"#0079c1",
+    "colour":"#00b5d0",
     "contents": [
         {
             "kind": "block",

@@ -5,7 +5,7 @@ const LoopGroup = () => {
   return {
     "kind": "category",
     "name": "Loop",
-    "colour":"#2e9340",
+    "colour":"#c5c341",
     "contents": [
         {
             "kind": "block",
