@@ -10,8 +10,7 @@ const VariablesGroup = () => {
     "contents": [
       {
         "kind": "block",
-        "type": "variables_set",
-        "colour":"blue"
+        "type": "variables_set"
       },
       {
         "kind": "block",

@@ -1,8 +1,8 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import * as Blockly from 'blockly';
 import 'blockly/blocks';
 import 'blockly/javascript';
-import './blocklyPage.css'
+import './blocklyPage.css';
 import LogicGroup from '../BlockGroups/Logic/LogicGroup';
 import MathGroup from '../BlockGroups/Math/MathGroup';
 import LoopGroup from '../BlockGroups/Loop/LoopGroup';
@@ -10,46 +10,19 @@ import FunctionGroup from '../BlockGroups/Function/FunctionGroup';
 import TextGroup from '../BlockGroups/Text/TextGroup';
 import VariablesGroup from '../BlockGroups/Variables/VariablesGroup';
 import ListGroup from '../BlockGroups/List/ListGroup';
-
-
+import Language from './Language';
+import BlocklyContext from './BlocklyContext';
+import { toolbox } from 'blockly/core/utils';
+import { formulaGenerator } from '../../Grammar/generator';
 
 const BlocklyPage: React.FC = () => {
+  const [blocklyData, setBlocklyData] = useState();
   const blocklyDiv = useRef<HTMLDivElement>(null);
   const workspace = useRef<Blockly.WorkspaceSvg>();
 
-  const getWorkspaceAsJson = () => {
-    const blocks = workspace.current.getAllBlocks(false);
-    const blocksData = blocks.map(block => {
-      return {
-        type: block.type,
-        id: block.id,
-        x: block.getRelativeToSurfaceXY().x,
-        y: block.getRelativeToSurfaceXY().y
-      };
-    });
-
-    return JSON.stringify(blocksData, null, 2);
-  };
-  const triggerDownload = (content, fileName) => {
-    const blob = new Blob([content], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const downloadLink = document.createElement('a');
-    downloadLink.href = url;
-    downloadLink.download = fileName;
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-    URL.revokeObjectURL(url);
-  };
-
-
-  const saveWorkspaceAsJson = () => {
-    const jsonString = getWorkspaceAsJson();
-    triggerDownload(jsonString, 'blockly_workspace.json');
-  };
-
 
   useEffect(() => {
+
     if (blocklyDiv.current) {
       const customTheme = Blockly.Theme.defineTheme('customTheme', {
         'base': Blockly.Themes.Classic,
@@ -84,6 +57,11 @@ const BlocklyPage: React.FC = () => {
             colourSecondary: "#c5c341",
             colourTertiary: "#c5c341"
           },
+          'procedure_blocks': {
+            colourPrimary: "#00c3d5",
+            colourSecondary: "#00c3d5",
+            colourTertiary: "#00c3d5"
+          },
         },
         name: 'a'
       });
@@ -109,8 +87,23 @@ const BlocklyPage: React.FC = () => {
         },
         theme: customTheme,
       });
-    }
 
+      const onWorkspaceChange = (e) => {
+        const code = formulaGenerator.workspaceToCode(workspace.current);
+        
+        // console.log(code, "KODE BURADA AYOL");
+        //"logic_compare"
+      }
+      workspace.current.addChangeListener(onWorkspaceChange);
+    }
+    // if (typeof Blockly.MyLanguage === 'undefined') {
+    //   Blockly.MyLanguage = {};
+    //   const code = Blockly.MyLanguage.workspaceToCode(workspace.current);
+    //   setBlocklyData(code);
+    // }
+    // debugger;
+
+ 
     return () => {
       if (workspace.current) {
         workspace.current.dispose();
@@ -119,13 +112,13 @@ const BlocklyPage: React.FC = () => {
     };
   }, []);
 
-
-  
   return (
     <div className="App">
-      <div ref={blocklyDiv} id="blocklyDivs" style={{ height: '93vh' }}>
-        <button onClick={saveWorkspaceAsJson}>asdsd</button>
-      </div>
+      <BlocklyContext.Provider value={blocklyData}>
+        <div ref={blocklyDiv} style={{ height: '93vh' }}>
+          <Language></Language>
+        </div>
+      </BlocklyContext.Provider>
     </div>
   );
 }
