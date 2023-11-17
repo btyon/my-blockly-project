@@ -10,7 +10,7 @@ import FunctionGroup from '../BlockGroups/Function/FunctionGroup';
 import TextGroup from '../BlockGroups/Text/TextGroup';
 import VariablesGroup from '../BlockGroups/Variables/VariablesGroup';
 import ListGroup from '../BlockGroups/List/ListGroup';
-import Language from './Language';
+
 import BlocklyContext from './BlocklyContext';
 import { toolbox } from 'blockly/core/utils';
 import { formulaGenerator } from '../../Grammar/generator';
@@ -116,7 +116,6 @@ const BlocklyPage: React.FC = () => {
     <div className="App">
       <BlocklyContext.Provider value={blocklyData}>
         <div ref={blocklyDiv} style={{ height: '93vh' }}>
-          <Language></Language>
         </div>
       </BlocklyContext.Provider>
     </div>

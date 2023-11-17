@@ -10,11 +10,13 @@ const VariablesGroup = () => {
     "contents": [
       {
         "kind": "block",
-        "type": "variables_set"
+        "type": "variables_set",
+        "id":"aa"
       },
       {
         "kind": "block",
-        "type": "variables_get"
+        "type": "variables_get",
+        "id":"aa22"
       }
 
     ]
