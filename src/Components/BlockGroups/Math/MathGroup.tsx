@@ -11,14 +11,14 @@ const MathGroup = () => {
             "kind": "block",
             "type": "math_random_int"
         },
-        {
-            "kind": "block",
-            "type": "math_random_float"
-        },
-        {
-            "kind": "block",
-            "type": "math_round"
-        },
+        // {
+        //     "kind": "block",
+        //     "type": "math_random_float"
+        // },
+        // {
+        //     "kind": "block",
+        //     "type": "math_round"
+        // },
         {
             "kind": "block",
             "type": "math_constant"

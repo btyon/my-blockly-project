@@ -20,7 +20,7 @@ const BlocklyPage: React.FC = () => {
   const blocklyDiv = useRef<HTMLDivElement>(null);
   const workspace = useRef<Blockly.WorkspaceSvg>();
 
-
+  
   useEffect(() => {
 
     if (blocklyDiv.current) {
