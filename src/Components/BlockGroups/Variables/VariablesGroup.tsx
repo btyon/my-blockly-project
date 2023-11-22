@@ -16,7 +16,7 @@ const VariablesGroup = () => {
       {
         "kind": "block",
         "type": "variables_get",
-        "id":"aa22"
+        "id":"22"
       }
 
     ]

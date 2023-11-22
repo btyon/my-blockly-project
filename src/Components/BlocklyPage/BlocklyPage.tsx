@@ -19,8 +19,8 @@ const BlocklyPage: React.FC = () => {
   const [blocklyData, setBlocklyData] = useState();
   const blocklyDiv = useRef<HTMLDivElement>(null);
   const workspace = useRef<Blockly.WorkspaceSvg>();
-
-  
+  const [generatedCode, setGeneratedCode] = useState('');
+  const [scope,setScope]=useState("");
   useEffect(() => {
 
     if (blocklyDiv.current) {
@@ -90,7 +90,7 @@ const BlocklyPage: React.FC = () => {
 
       const onWorkspaceChange = (e) => {
         const code = formulaGenerator.workspaceToCode(workspace.current);
-        
+        setGeneratedCode(code);
         // console.log(code, "KODE BURADA AYOL");
         //"logic_compare"
       }
@@ -111,14 +111,17 @@ const BlocklyPage: React.FC = () => {
       }
     };
   }, []);
-
+  const handleTextareaChange = (event:any) => {
+    setScope(event.target.value)
+    console.log(event.target.value);
+  };
   return (
-    <div className="App">
-      <BlocklyContext.Provider value={blocklyData}>
-        <div ref={blocklyDiv} style={{ height: '93vh' }}>
-        </div>
-      </BlocklyContext.Provider>
-    </div>
+    <div className="App" style={{ display: 'flex', height: '93vh' }}>
+    <BlocklyContext.Provider value={blocklyData}>
+      <div ref={blocklyDiv} style={{ flex: 1 }}></div>
+      <textarea  style={{ flex: 1 }} onChange={handleTextareaChange}></textarea>
+    </BlocklyContext.Provider>
+  </div>
   );
 }
 

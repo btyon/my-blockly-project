@@ -17,6 +17,8 @@ formulaGenerator.forBlock['variables_set'] = function (block) {
         [valueCode] = formulaGenerator.forBlock[valueBlock.type](valueBlock);
     }
     const code = `&${variableName} = ${valueCode}\n`;
+    console.log(code,"kj");
+    
     return code;
 };
 //oldu
