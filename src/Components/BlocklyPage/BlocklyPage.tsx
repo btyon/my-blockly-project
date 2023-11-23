@@ -20,7 +20,9 @@ const BlocklyPage: React.FC = () => {
   const blocklyDiv = useRef<HTMLDivElement>(null);
   const workspace = useRef<Blockly.WorkspaceSvg>();
   const [generatedCode, setGeneratedCode] = useState('');
-  const [scope,setScope]=useState("");
+  const fileInputRef = useRef(null);
+
+  // const [scope,setScope]=useState("");
   useEffect(() => {
 
     if (blocklyDiv.current) {
@@ -90,6 +92,12 @@ const BlocklyPage: React.FC = () => {
 
       const onWorkspaceChange = (e) => {
         const code = formulaGenerator.workspaceToCode(workspace.current);
+        const workspaceXml = Blockly.Xml.workspaceToDom(workspace.current);
+        const savexml = Blockly.Xml.domToText(workspaceXml)
+        console.log(savexml);
+        var json = Blockly.serialization.workspaces.save(workspace.current);
+        // console.log(json,'jsonn');
+
         setGeneratedCode(code);
         // console.log(code, "KODE BURADA AYOL");
         //"logic_compare"
@@ -103,7 +111,7 @@ const BlocklyPage: React.FC = () => {
     // }
     // debugger;
 
- 
+
     return () => {
       if (workspace.current) {
         workspace.current.dispose();
@@ -111,17 +119,63 @@ const BlocklyPage: React.FC = () => {
       }
     };
   }, []);
-  const handleTextareaChange = (event:any) => {
-    setScope(event.target.value)
-    console.log(event.target.value);
+
+
+  const downloadXml = () => {
+    debugger;
+    const state = Blockly.serialization.workspaces.save(workspace.current);
+    // const blob = new Blob([state], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(state)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    link.href = url;
+    link.download = "kek.json";
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
+
+  // const handleTextareaChange = (event:any) => {
+  //   setScope(event.target.value)
+  //   console.log(event.target.value);
+  // };
+  const loadXml = (event) => {
+    debugger;
+   
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      const xmlText = event.target.result;
+      Blockly.serialization.workspaces.load(JSON.parse(xmlText),workspace.current);
+    };
+    reader.readAsText(event.target.files[0]);
+  };
+
+
   return (
     <div className="App" style={{ display: 'flex', height: '93vh' }}>
-    <BlocklyContext.Provider value={blocklyData}>
-      <div ref={blocklyDiv} style={{ flex: 1 }}></div>
-      <textarea  style={{ flex: 1 }} onChange={handleTextareaChange}></textarea>
-    </BlocklyContext.Provider>
-  </div>
+      <BlocklyContext.Provider value={blocklyData}>
+        <div ref={blocklyDiv} style={{ flex: 1 }}></div>
+        {/* <textarea  style={{ flex: 1 }} onChange={handleTextareaChange}></textarea> */}
+        <button onClick={downloadXml}>XML’i İndir</button>
+        <input
+          type="file"
+          id="file"
+          style={{ display: 'none' }}
+          onChange={loadXml}
+          ref={fileInputRef} 
+        />
+        <button
+          onClick={() => fileInputRef.current && fileInputRef.current.click()}
+          style={{ backgroundColor: '#4CAF50', color: 'white', padding: '10px', textAlign: 'center', textDecoration: 'none', display: 'inline-block', fontSize: '16px', margin: '4px 2px', cursor: 'pointer' }}
+        >
+          XML’i Yükle
+        </button>
+      </BlocklyContext.Provider>
+    </div>
   );
 }
 

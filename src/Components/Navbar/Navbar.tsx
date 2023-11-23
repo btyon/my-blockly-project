@@ -33,6 +33,7 @@ export default function Navbar() {
                     <Typography variant="h5" color="inherit" component="div">
                         Functional Block Diagram
                     </Typography>
+                    <button>j</button>
                 </Toolbar>
             </AppBar>
             <Leftbar></Leftbar>
