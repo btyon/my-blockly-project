@@ -14,6 +14,7 @@ import ListGroup from '../BlockGroups/List/ListGroup';
 import BlocklyContext from './BlocklyContext';
 import { toolbox } from 'blockly/core/utils';
 import { formulaGenerator } from '../../Grammar/generator';
+import Navbar from '../Navbar/Navbar';
 
 const BlocklyPage: React.FC = () => {
   const [blocklyData, setBlocklyData] = useState();
@@ -97,7 +98,8 @@ const BlocklyPage: React.FC = () => {
         console.log(savexml);
         var json = Blockly.serialization.workspaces.save(workspace.current);
         // console.log(json,'jsonn');
-
+        console.log(code,"dende3neden");
+        
         setGeneratedCode(code);
         // console.log(code, "KODE BURADA AYOL");
         //"logic_compare"
@@ -144,8 +146,6 @@ const BlocklyPage: React.FC = () => {
   // };
   const loadXml = (event) => {
     debugger;
-   
-
     const reader = new FileReader();
     reader.onload = function (event) {
       const xmlText = event.target.result;
@@ -156,27 +156,13 @@ const BlocklyPage: React.FC = () => {
 
 
   return (
-    <div className="App" style={{ display: 'flex', height: '93vh' }}>
+    <div className="App" style={{ display: 'flex', height: '93vh',marginTop:'3.5%' }}>
       <BlocklyContext.Provider value={blocklyData}>
         <div ref={blocklyDiv} style={{ flex: 1 }}></div>
-        {/* <textarea  style={{ flex: 1 }} onChange={handleTextareaChange}></textarea> */}
-        <button onClick={downloadXml}>XML’i İndir</button>
-        <input
-          type="file"
-          id="file"
-          style={{ display: 'none' }}
-          onChange={loadXml}
-          ref={fileInputRef} 
-        />
-        <button
-          onClick={() => fileInputRef.current && fileInputRef.current.click()}
-          style={{ backgroundColor: '#4CAF50', color: 'white', padding: '10px', textAlign: 'center', textDecoration: 'none', display: 'inline-block', fontSize: '16px', margin: '4px 2px', cursor: 'pointer' }}
-        >
-          XML’i Yükle
-        </button>
+        <Navbar downloadXml={downloadXml} loadXml={loadXml} fileInputRef={fileInputRef}></Navbar>
       </BlocklyContext.Provider>
+      <div className='code'>{generatedCode}</div>
     </div>
   );
 }
-
 export default BlocklyPage;

@@ -9,3 +9,20 @@
 
     }
  */
+button{
+    background-color: rgba(73, 77, 74, 0.767);
+    float: right;
+    display: flex;
+    border: 1px gray;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
+    color: rgb(250, 250, 250);
+}
+
+.code{
+  float: left;
+  background-color: rgb(43, 45, 46);
+  color: antiquewhite;
+  width: 30%;
+}

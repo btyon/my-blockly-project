@@ -7,9 +7,10 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import './navbar.css'
 import Leftbar from '../Leftbar/Leftbar';
-export default function Navbar() {
+import BlocklyPage from '../BlocklyPage/BlocklyPage';
+export default function Navbar(props: { downloadXml?: Function, loadXml?: Function,fileInputRef:any }) {
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(true);
-    const toggleDrawer = (open:boolean) => {
+    const toggleDrawer = (open: boolean) => {
         const blockList = document.getElementsByClassName("blocklyFlyout")[1];
         if (open) {
             document.getElementsByClassName("blocklyToolboxDiv blocklyNonSelectable")[0].style.display = "block";
@@ -24,20 +25,30 @@ export default function Navbar() {
         setIsDrawerOpen(open);
     };
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar style={{ height: '7%',backgroundColor:'#245a71' }}>
+        <Box >
+            <AppBar style={{ height: '7%', backgroundColor: '#245a71' }}>
                 <Toolbar variant="dense" className='toolbar'>
                     <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-                        <MenuIcon onClick={()=>toggleDrawer(!isDrawerOpen)} />
+                        <MenuIcon onClick={() => toggleDrawer(!isDrawerOpen)} />
                     </IconButton>
                     <Typography variant="h5" color="inherit" component="div">
                         Functional Block Diagram
                     </Typography>
-                    <button>j</button>
+                    <button onClick={ props?.downloadXml}>Json İndir</button>
+                    <input
+                        type="file"
+                        id="file"
+                        style={{ display: 'none' }}
+                        onChange={props.loadXml}
+                        ref={props.fileInputRef}
+                    />
+                    <button
+                        onClick={() => props.fileInputRef.current && props.fileInputRef.current.click()}
+                    >
+                         Json Yükle
+                    </button>
                 </Toolbar>
             </AppBar>
-            <Leftbar></Leftbar>
-
 
         </Box>
     );
