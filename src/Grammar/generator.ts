@@ -130,6 +130,7 @@ formulaGenerator.forBlock['logic_negate'] = function (block) {
 
 //buna bakk if0 a girip do ya girmiyo
 formulaGenerator.forBlock['controls_if'] = function (block) {
+    debugger;
     let code = 'if (';
     const conditionBlock = block.getInputTargetBlock('IF0');
 
@@ -142,7 +143,8 @@ formulaGenerator.forBlock['controls_if'] = function (block) {
 
     const doCodeBlocks = [];
 
-    const doBlock = block.getInputTargetBlock('DO');
+    // 'DO' yerine 'DO0' kullanılmalı
+    const doBlock = block.getInputTargetBlock('DO0');
     if (doBlock) {
         const [doCode] = formulaGenerator.forBlock[doBlock.type](doBlock);
         doCodeBlocks.push(doCode);
@@ -154,7 +156,7 @@ formulaGenerator.forBlock['controls_if'] = function (block) {
 
     code += '\n}';
 
-    const elseBlock = block.getInputTargetBlock('ELSE0');
+    const elseBlock = block.getInputTargetBlock('ELSE');
     if (elseBlock) {
         code += ` else {\n`;
         const [elseCode] = formulaGenerator.forBlock[elseBlock.type](elseBlock);
@@ -165,6 +167,7 @@ formulaGenerator.forBlock['controls_if'] = function (block) {
 
     return [code, formulaGenerator.ORDER_NONE];
 };
+
 
 //oldu
 formulaGenerator.forBlock['math_number'] = function (block) {

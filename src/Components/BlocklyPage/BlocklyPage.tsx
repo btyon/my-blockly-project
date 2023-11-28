@@ -124,13 +124,11 @@ const BlocklyPage: React.FC = () => {
 
 
   const downloadXml = () => {
-    debugger;
     const state = Blockly.serialization.workspaces.save(workspace.current);
     // const blob = new Blob([state], { type: 'application/json' });
     const blob = new Blob([JSON.stringify(state)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    
     link.href = url;
     link.download = "kek.json";
     document.body.appendChild(link);

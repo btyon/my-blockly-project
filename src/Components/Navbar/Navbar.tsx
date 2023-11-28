@@ -5,9 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import './navbar.css'
-import Leftbar from '../Leftbar/Leftbar';
-import BlocklyPage from '../BlocklyPage/BlocklyPage';
+import './navbar.css';
 export default function Navbar(props: { downloadXml?: Function, loadXml?: Function,fileInputRef:any }) {
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(true);
     const toggleDrawer = (open: boolean) => {
