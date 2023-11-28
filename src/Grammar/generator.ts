@@ -128,9 +128,8 @@ formulaGenerator.forBlock['logic_negate'] = function (block) {
 }
 
 
-//buna bakk if0 a girip do ya girmiyo
+//oldu
 formulaGenerator.forBlock['controls_if'] = function (block) {
-    debugger;
     let code = 'if (';
     const conditionBlock = block.getInputTargetBlock('IF0');
 
@@ -143,7 +142,6 @@ formulaGenerator.forBlock['controls_if'] = function (block) {
 
     const doCodeBlocks = [];
 
-    // 'DO' yerine 'DO0' kullanılmalı
     const doBlock = block.getInputTargetBlock('DO0');
     if (doBlock) {
         const [doCode] = formulaGenerator.forBlock[doBlock.type](doBlock);
@@ -330,22 +328,28 @@ formulaGenerator.forBlock['math_constant'] = function (block) {
     return [code, formulaGenerator.ORDER_ATOMIC];
 };
 
-//DİKKAT GERİ DÖN!!
+//oldu
 formulaGenerator.forBlock['math_random_int'] = function (block) {
+    debugger;
     const minBlock = block.getInputTargetBlock('MIN');
     const maxBlock = block.getInputTargetBlock('MAX');
 
-    let minCode;
-    let maxCode;
-    debugger;
-    [minCode] = formulaGenerator.forBlock[minBlock.type](minBlock);
-    [maxCode] = formulaGenerator.forBlock[maxBlock.type](maxBlock);
+    let minCode = '0'; // Varsayılan değerler değişebilir şiömdilik dursun!!!
+    let maxCode = '0';
+
+    if (minBlock) {
+        [minCode] = formulaGenerator.forBlock[minBlock.type](minBlock);
+    }
+    if (maxBlock) {
+        [maxCode] = formulaGenerator.forBlock[maxBlock.type](maxBlock);
+    }
 
     const code = `Math.floor(Math.random() * (${maxCode} - ${minCode} + 1)) + ${minCode}`;
     console.log(code);
 
     return [code, formulaGenerator.ORDER_HIGH];
 };
+
 
 //oldu
 formulaGenerator.forBlock['controls_repeat_ext'] = function (block) {
