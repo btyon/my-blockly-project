@@ -22,6 +22,7 @@ const BlocklyPage: React.FC = () => {
   const workspace = useRef<Blockly.WorkspaceSvg>();
   const [generatedCode, setGeneratedCode] = useState('');
   const fileInputRef = useRef(null);
+  const [blocksJson, setBlocksJson] = useState(''); 
 
   // const [scope,setScope]=useState("");
   useEffect(() => {
@@ -103,6 +104,8 @@ const BlocklyPage: React.FC = () => {
         setGeneratedCode(code);
         // console.log(code, "KODE BURADA AYOL");
         //"logic_compare"
+        var json = Blockly.serialization.workspaces.save(workspace.current);
+        setBlocksJson(JSON.stringify(json, null, 2));
       }
       workspace.current.addChangeListener(onWorkspaceChange);
     }
@@ -152,6 +155,18 @@ const BlocklyPage: React.FC = () => {
     reader.readAsText(event.target.files[0]);
   };
 
+  const handleJsonChange = (event) => {
+    setBlocksJson(event.target.value);
+  };
+
+  const updateWorkspace = () => {
+    try {
+      const json = JSON.parse(blocksJson);
+      Blockly.serialization.workspaces.load(json, workspace.current);
+    } catch (error) {
+      console.error('Invalid JSON:', error);
+    }
+  };
 
   return (
     <div className="App" style={{ display: 'flex', height: '93vh',marginTop:'3.5%' }}>
@@ -159,8 +174,16 @@ const BlocklyPage: React.FC = () => {
         <div ref={blocklyDiv} style={{ flex: 1 }}></div>
         <Navbar downloadXml={downloadXml} loadXml={loadXml} fileInputRef={fileInputRef}></Navbar>
       </BlocklyContext.Provider>
-      <div className='code'>{generatedCode}</div>
+      <div className='code'>{generatedCode}
+      <textarea 
+            value={blocksJson} 
+            onChange={handleJsonChange} 
+            style={{ width: '100%', height: '300px' }}
+          ></textarea>
+          <button onClick={updateWorkspace}>Update Blocks</button>
+      </div>
     </div>
+    
   );
 }
 export default BlocklyPage;
