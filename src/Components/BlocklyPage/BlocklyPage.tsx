@@ -23,8 +23,8 @@ const BlocklyPage: React.FC = () => {
   const workspace = useRef<Blockly.WorkspaceSvg>();
   const [generatedCode, setGeneratedCode] = useState('');
   const fileInputRef = useRef(null);
-  const [blocksJson, setBlocksJson] = useState(''); 
-
+  const [blocksJson, setBlocksJson] = useState('');
+  const [codejson, setCodejson] = useState("code");
   // const [scope,setScope]=useState("");
   useEffect(() => {
 
@@ -161,7 +161,7 @@ const BlocklyPage: React.FC = () => {
     const reader = new FileReader();
     reader.onload = function (event) {
       const xmlText = event.target.result;
-      Blockly.serialization.workspaces.load(JSON.parse(xmlText),workspace.current);
+      Blockly.serialization.workspaces.load(JSON.parse(xmlText), workspace.current);
     };
     reader.readAsText(event.target.files[0]);
   };
@@ -180,21 +180,31 @@ const BlocklyPage: React.FC = () => {
   };
 
   return (
-    <div className="App" style={{ display: 'flex', height: '93vh',marginTop:'3.5%' }}>
+    <div className="App" style={{ display: 'flex', height: '93vh', marginTop: '3.5%' }}>
       <BlocklyContext.Provider value={blocklyData}>
         <div ref={blocklyDiv} style={{ flex: 1 }}></div>
         <Navbar downloadXml={downloadXml} loadXml={loadXml} fileInputRef={fileInputRef}></Navbar>
       </BlocklyContext.Provider>
-      <div className='code'>{generatedCode}
-      <textarea 
-            value={blocksJson} 
-            onChange={handleJsonChange} 
-            style={{ width: '100%', height: '300px' }}
+
+      <div className='generator'>
+        <div>
+          <button onClick={() => { setCodejson("json") }}>json</button>
+          <button onClick={() => { setCodejson("code") }}>code</button>
+        </div>
+        <div className='code' style={{ display: `${codejson == "code" ? "block" : "none"}` }}>
+          {generatedCode}
+        </div>
+        <div className='json' style={{ display: `${codejson == "json" ? "block" : "none"}` }}>
+          <textarea
+            value={blocksJson}
+            onChange={handleJsonChange}
           ></textarea>
           <button onClick={updateWorkspace}>Update Blocks</button>
+        </div>
+
       </div>
     </div>
-    
+
   );
 }
 export default BlocklyPage;

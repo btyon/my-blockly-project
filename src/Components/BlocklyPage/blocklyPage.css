@@ -20,9 +20,24 @@ button{
     color: rgb(250, 250, 250);
 }
 
-.code{
-  float: left;
+.generator{
+  /* float: left; */
   background-color: rgb(43, 45, 46);
   color: antiquewhite;
   width: 30%;
+}
+.code,.json{
+    background-color: rgb(32, 33, 34);
+    margin-top: 15%;
+    width: 94%;
+    height: 88%;
+    margin-left: 3%;
+    color: aliceblue;
+}
+textarea{
+    height: 90%;
+    width: 99%;
+    background-color: rgb(32, 33, 34);
+    color: aliceblue;
+
 }
