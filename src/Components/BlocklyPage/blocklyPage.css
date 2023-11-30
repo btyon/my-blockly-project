@@ -44,12 +44,3 @@ textarea{
 .blocklyPassiveBlock {
     opacity: 0.5; 
 }
-select{
-    background-color: rgb(32, 33, 34);
-    color: aliceblue;
-    margin-top: 5%;
-    margin-left: 10%;
-}
-label{
-    margin-left: 3%;
-}

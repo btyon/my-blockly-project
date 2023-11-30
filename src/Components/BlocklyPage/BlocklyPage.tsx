@@ -26,7 +26,6 @@ const BlocklyPage: React.FC = () => {
   const fileInputRef = useRef(null);
   const [blocksJson, setBlocksJson] = useState('');
   const [codejson, setCodejson] = useState("code");
-  const [renderer, setRenderer] = useState('zelos');
   useEffect(() => {
 
     if (blocklyDiv.current) {
@@ -35,38 +34,38 @@ const BlocklyPage: React.FC = () => {
         'blockStyles': {
           'variable_blocks': {
             colourPrimary: "#e67200",
-            colourSecondary: "#e67200",
-            colourTertiary: "#e67200"
+            colourSecondary: "#f4a457",
+            colourTertiary: "#f4a457"
           },
           'text_blocks': {
             colourPrimary: "#52007f",
-            colourSecondary: "#52007f",
-            colourTertiary: "#52007f"
+            colourSecondary: "#7a3f9a",
+            colourTertiary: "#7a3f9a"
           },
           'list_blocks': {
             colourPrimary: "#00677d",
-            colourSecondary: "#00677d",
-            colourTertiary: "#00677d"
+            colourSecondary: "#6c9aa3",
+            colourTertiary: "#6c9aa3"
           },
           'logic_blocks': {
             colourPrimary: "#cbacff",
-            colourSecondary: "#cbacff",
-            colourTertiary: "#cbacff"
+            colourSecondary: "#ba92fe",
+            colourTertiary: "#a36efe"
           },
           'math_blocks': {
             colourPrimary: "#00b5d0",
-            colourSecondary: "#00b5d0",
-            colourTertiary: "#00b5d0"
+            colourSecondary: "#018a9e",
+            colourTertiary: "#008194"
           },
           'loop_blocks': {
             colourPrimary: "#c5c341",
-            colourSecondary: "#c5c341",
-            colourTertiary: "#c5c341"
+            colourSecondary: "#999722",
+            colourTertiary: "#999722"
           },
           'procedure_blocks': {
             colourPrimary: "#00c3d5",
-            colourSecondary: "#00c3d5",
-            colourTertiary: "#00c3d5"
+            colourSecondary: "#06838f",
+            colourTertiary: "#06838f"
           },
         },
         name: 'a'
@@ -100,7 +99,7 @@ const BlocklyPage: React.FC = () => {
           snap: true,
         },
         theme: customTheme,
-        renderer: renderer
+        renderer: 'zelos'
       });
 
       const onWorkspaceChange = (e) => {
@@ -147,7 +146,7 @@ const BlocklyPage: React.FC = () => {
         workspace.current = null;
       }
     };
-  }, [renderer]);
+  }, []);
 
   const downloadXml = () => {
     const state = Blockly.serialization.workspaces.save(workspace.current);
@@ -194,7 +193,6 @@ const BlocklyPage: React.FC = () => {
 
       <div className='generator'>
         <div>
-          <button onClick={() => { setCodejson("settings") }}>settings</button>
           <button onClick={() => { setCodejson("json") }}>json</button>
           <button onClick={() => { setCodejson("code") }}>code</button>
         </div>
@@ -207,13 +205,6 @@ const BlocklyPage: React.FC = () => {
             onChange={handleJsonChange}
           ></textarea>
           <button onClick={updateWorkspace}>Update Blocks</button>
-        </div>
-        <div className='settings' style={{ display: `${codejson == "settings" ? "block" : "none"} ` }}>
-          <label>Renderer</label>
-          <select onChange={(event) => setRenderer(event.target.value)} value={renderer}>
-            <option value="geras">Geras</option>
-            <option value="zelos">Zelos</option>
-          </select>
         </div>
       </div>
     </div>
