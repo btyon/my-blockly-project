@@ -15,7 +15,8 @@ import BlocklyContext from './BlocklyContext';
 import { toolbox } from 'blockly/core/utils';
 import { formulaGenerator } from '../../Grammar/generator';
 import Navbar from '../Navbar/Navbar';
-import {ZoomToFitControl} from '@blockly/zoom-to-fit';
+import { ZoomToFitControl } from '@blockly/zoom-to-fit';
+import { Zelos } from 'blockly/core/theme/zelos';
 
 const BlocklyPage: React.FC = () => {
   const [blocklyData, setBlocklyData] = useState();
@@ -25,7 +26,7 @@ const BlocklyPage: React.FC = () => {
   const fileInputRef = useRef(null);
   const [blocksJson, setBlocksJson] = useState('');
   const [codejson, setCodejson] = useState("code");
-  // const [scope,setScope]=useState("");
+  const [renderer, setRenderer] = useState('zelos');
   useEffect(() => {
 
     if (blocklyDiv.current) {
@@ -99,6 +100,7 @@ const BlocklyPage: React.FC = () => {
           snap: true,
         },
         theme: customTheme,
+        renderer: renderer
       });
 
       const onWorkspaceChange = (e) => {
@@ -107,20 +109,15 @@ const BlocklyPage: React.FC = () => {
         const savexml = Blockly.Xml.domToText(workspaceXml)
         console.log(savexml);
         var json = Blockly.serialization.workspaces.save(workspace.current);
-        // console.log(json,'jsonn');
-        console.log(code, "dende3neden");
-
         setGeneratedCode(code);
-        // console.log(code, "KODE BURADA AYOL");
-        //"logic_compare"
         var json = Blockly.serialization.workspaces.save(workspace.current);
         setBlocksJson(JSON.stringify(json, null, 2));
         const allBlocks = workspace.current.getAllBlocks(false);
         allBlocks.forEach(block => {
           const isBlockConnected = block.outputConnection && block.outputConnection.isConnected();
-          const isInnerBlockConnected = block.inputList.some(input => 
-            input.connection && 
-            input.connection.targetConnection && 
+          const isInnerBlockConnected = block.inputList.some(input =>
+            input.connection &&
+            input.connection.targetConnection &&
             input.connection.targetBlock()
           );
           if (!isBlockConnected && !isInnerBlockConnected) {
@@ -143,40 +140,17 @@ const BlocklyPage: React.FC = () => {
       const zoomToFit = new ZoomToFitControl(workspace.current);
       zoomToFit.init();
     }
-    // if (typeof Blockly.MyLanguage === 'undefined') {
-    //   Blockly.MyLanguage = {};
-    //   const code = Blockly.MyLanguage.workspaceToCode(workspace.current);
-    //   setBlocklyData(code);
-    // }
-    // debugger;
 
     return () => {
-      if (workspace.current) {  // bu return ifadesindeki fonksiyon, bileşenin yaşam döngüsü boyunca yalnızca bir kez çalıştırılır: Bileşen DOM'dan kaldırıldığında. Bu, React'te kaynak yönetimi ve performans optimizasyonunun önemli bir parçasıdır.
+      if (workspace.current) {
         workspace.current.dispose();
         workspace.current = null;
       }
     };
-  }, []);
-
-  const onWorkspaceChange = (e) => {
-    const code = formulaGenerator.workspaceToCode(workspace.current);
-    const workspaceXml = Blockly.Xml.workspaceToDom(workspace.current);
-    const savexml = Blockly.Xml.domToText(workspaceXml)
-    console.log(savexml);
-    var json = Blockly.serialization.workspaces.save(workspace.current);
-    // console.log(json,'jsonn');
-    console.log(code,"dende3neden");
-    
-    setGeneratedCode(code);
-    // console.log(code, "KODE BURADA AYOL");
-    //"logic_compare"
-    var json = Blockly.serialization.workspaces.save(workspace.current);
-    setBlocksJson(JSON.stringify(json, null, 2));
-  }
+  }, [renderer]);
 
   const downloadXml = () => {
     const state = Blockly.serialization.workspaces.save(workspace.current);
-    // const blob = new Blob([state], { type: 'application/json' });
     const blob = new Blob([JSON.stringify(state)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -188,11 +162,6 @@ const BlocklyPage: React.FC = () => {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
-
-  // const handleTextareaChange = (event:any) => {
-  //   setScope(event.target.value)
-  //   console.log(event.target.value);
-  // };
   const loadXml = (event) => {
     debugger;
     const reader = new FileReader();
@@ -225,6 +194,7 @@ const BlocklyPage: React.FC = () => {
 
       <div className='generator'>
         <div>
+          <button onClick={() => { setCodejson("settings") }}>settings</button>
           <button onClick={() => { setCodejson("json") }}>json</button>
           <button onClick={() => { setCodejson("code") }}>code</button>
         </div>
@@ -238,7 +208,13 @@ const BlocklyPage: React.FC = () => {
           ></textarea>
           <button onClick={updateWorkspace}>Update Blocks</button>
         </div>
-
+        <div className='settings' style={{ display: `${codejson == "settings" ? "block" : "none"} ` }}>
+          <label>Renderer</label>
+          <select onChange={(event) => setRenderer(event.target.value)} value={renderer}>
+            <option value="geras">Geras</option>
+            <option value="zelos">Zelos</option>
+          </select>
+        </div>
       </div>
     </div>
 
