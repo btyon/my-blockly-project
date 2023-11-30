@@ -5,7 +5,7 @@ export const formulaGenerator = new Blockly.Generator('formula');
 //oldu
 formulaGenerator.forBlock['variables_get'] = function (block) {
     const variableName = block.getField("VAR")?.variable?.name;
-    const code = `${variableName}`;
+    const code = `${variableName};`;
     return [code, Order.ATOMIC];
 };
 //oldu

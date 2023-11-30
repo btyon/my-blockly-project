@@ -106,7 +106,30 @@ const BlocklyPage: React.FC = () => {
         //"logic_compare"
         var json = Blockly.serialization.workspaces.save(workspace.current);
         setBlocksJson(JSON.stringify(json, null, 2));
+        const allBlocks = workspace.current.getAllBlocks(false);
+        allBlocks.forEach(block => {
+          const isBlockConnected = block.outputConnection && block.outputConnection.isConnected();
+          const isInnerBlockConnected = block.inputList.some(input => 
+            input.connection && 
+            input.connection.targetConnection && 
+            input.connection.targetBlock()
+          );
+          if (!isBlockConnected && !isInnerBlockConnected) {
+            block.getSvgRoot().classList.add('blocklyPassiveBlock');
+            const childBlocks = block.getDescendants();
+            childBlocks.forEach(child => {
+              child.getSvgRoot().classList.add('blocklyPassiveBlock');
+            });
+          } else {
+            block.getSvgRoot().classList.remove('blocklyPassiveBlock');
+            const childBlocks = block.getDescendants();
+            childBlocks.forEach(child => {
+              child.getSvgRoot().classList.remove('blocklyPassiveBlock');
+            });
+          }
+        });
       }
+
       workspace.current.addChangeListener(onWorkspaceChange);
     }
     // if (typeof Blockly.MyLanguage === 'undefined') {
