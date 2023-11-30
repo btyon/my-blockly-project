@@ -15,6 +15,7 @@ import BlocklyContext from './BlocklyContext';
 import { toolbox } from 'blockly/core/utils';
 import { formulaGenerator } from '../../Grammar/generator';
 import Navbar from '../Navbar/Navbar';
+import {ZoomToFitControl} from '@blockly/zoom-to-fit';
 
 const BlocklyPage: React.FC = () => {
   const [blocklyData, setBlocklyData] = useState();
@@ -83,6 +84,14 @@ const BlocklyPage: React.FC = () => {
             ListGroup(),
           ]
         },
+        zoom: {
+          controls: true,  // Zoom kontrollerini etkinleştir
+          wheel: true,     // Fare tekerleğiyle zoom yapmayı etkinleştir
+          startScale: 1.0, // Başlangıç zoom seviyesi
+          maxScale: 3,     // Maksimum zoom seviyesi
+          minScale: 0.3,   // Minimum zoom seviyesi
+          scaleSpeed: 1.2  // Zoom hızı
+        },
         grid: {
           spacing: 15,
           length: 3,
@@ -91,23 +100,11 @@ const BlocklyPage: React.FC = () => {
         },
         theme: customTheme,
       });
-
-      const onWorkspaceChange = (e) => {
-        const code = formulaGenerator.workspaceToCode(workspace.current);
-        const workspaceXml = Blockly.Xml.workspaceToDom(workspace.current);
-        const savexml = Blockly.Xml.domToText(workspaceXml)
-        console.log(savexml);
-        var json = Blockly.serialization.workspaces.save(workspace.current);
-        // console.log(json,'jsonn');
-        console.log(code,"dende3neden");
-        
-        setGeneratedCode(code);
-        // console.log(code, "KODE BURADA AYOL");
-        //"logic_compare"
-        var json = Blockly.serialization.workspaces.save(workspace.current);
-        setBlocksJson(JSON.stringify(json, null, 2));
-      }
+      
+      
       workspace.current.addChangeListener(onWorkspaceChange);
+      const zoomToFit = new ZoomToFitControl(workspace.current);
+      zoomToFit.init();
     }
     // if (typeof Blockly.MyLanguage === 'undefined') {
     //   Blockly.MyLanguage = {};
@@ -116,15 +113,29 @@ const BlocklyPage: React.FC = () => {
     // }
     // debugger;
 
-
     return () => {
-      if (workspace.current) {
+      if (workspace.current) {  // bu return ifadesindeki fonksiyon, bileşenin yaşam döngüsü boyunca yalnızca bir kez çalıştırılır: Bileşen DOM'dan kaldırıldığında. Bu, React'te kaynak yönetimi ve performans optimizasyonunun önemli bir parçasıdır.
         workspace.current.dispose();
         workspace.current = null;
       }
     };
   }, []);
 
+  const onWorkspaceChange = (e) => {
+    const code = formulaGenerator.workspaceToCode(workspace.current);
+    const workspaceXml = Blockly.Xml.workspaceToDom(workspace.current);
+    const savexml = Blockly.Xml.domToText(workspaceXml)
+    console.log(savexml);
+    var json = Blockly.serialization.workspaces.save(workspace.current);
+    // console.log(json,'jsonn');
+    console.log(code,"dende3neden");
+    
+    setGeneratedCode(code);
+    // console.log(code, "KODE BURADA AYOL");
+    //"logic_compare"
+    var json = Blockly.serialization.workspaces.save(workspace.current);
+    setBlocksJson(JSON.stringify(json, null, 2));
+  }
 
   const downloadXml = () => {
     const state = Blockly.serialization.workspaces.save(workspace.current);
